@@ -60,6 +60,7 @@ export default class App extends React.Component {
     codigo_validacion:"",
     comando:"",
     getValue: '',
+    check_not:''
   };
 
   
@@ -79,7 +80,7 @@ export default class App extends React.Component {
   };
 
   Save_Notifications(data){
-    //alert("Almacena Local");
+    //alert("Almacena Local"+JSON.stringify(data));
     console.log("Guarda en la base local "+data);
     
     AsyncStorage.setItem('not', JSON.stringify(data));
@@ -95,23 +96,37 @@ export default class App extends React.Component {
 
       //Setting the value in Text
     );
+    alert(JSON.stringify(this.state.getValue))
   };
 
-  boot_notifi (){
+  async boot_notifi (){
     //function to get the value from AsyncStorage
     //alert("Llena el array");
-    AsyncStorage.getItem('not').then(
+    await AsyncStorage.getItem('not').then(
       value =>
         //AsyncStorage returns a promise so adding a callback to get the value
-        this.setState({ pila_notificaciones : JSON.parse(value) })
+        this.setState({ check_not : JSON.parse(value) })
 
       //Setting the value in Text
     );
+    console.log("Fin 1");
+    console.log(this.state.check_not);
+    if(this.state.check_not==undefined){
+        alert("Sin notifiaciones");
+    }else{
+        this.setState({pila_notificaciones:this.state.check_not});
+    }
+    
+    
+    //alert(this.state.check_not);
   };
 
   async componentDidMount(){
     
-      this.setState.pila_notificaciones= await this.boot_notifi();
+     let variable= await this.boot_notifi();
+      console.log("Fin 2");
+      
+  
       let token_get= await getToken();
 
       console.log(token_get);
@@ -180,6 +195,7 @@ export default class App extends React.Component {
         if(data.comando=="004"){
           //alert("Comando de informacion de pago");
           this.state.pila_notificaciones.push(data);
+          this.Save_Notifications(this.state.pila_notificaciones);
           console.log(data);
           
         }
@@ -238,14 +254,14 @@ export default class App extends React.Component {
                     <View style={{width:50, height:50,left:'70%',zIndex: 0, position: 'absolute'}}>
                         <Image
                           style={{ width: '100%', height: '100%' }}
-                          source={{ uri: 'https://www.stickpng.com/assets/images/58afdad6829958a978a4a693.png' }}
+                          source={{ uri: 'https://image.flaticon.com/icons/png/512/61/61671.png' }}
                         />
                     </View>
 
                     <View style={{width:50, height:50,left:'85%',zIndex: 0, position: 'absolute'}}>
                         <Image
                           style={{ width: '100%', height: '100%' }}
-                          source={{ uri: 'https://www.stickpng.com/assets/images/58afdad6829958a978a4a693.png' }}
+                          source={{ uri: 'https://cdn0.iconfinder.com/data/icons/google-material-design-3-0/48/ic_settings_48px-512.png' }}
                         />
                     </View>
               
@@ -253,7 +269,9 @@ export default class App extends React.Component {
               
 
             <View style={{borderWidth:0,width:'100%',height:'84%',top:'1%'}}>
-            <Text>{JSON.stringify(this.state.getValue)}</Text>
+              <Text>Token Id:</Text>
+              <TextInput value={this.state.token}></TextInput>
+              
               <ScrollView style={{backgroundColor:"#FFF"}}>
                   
                   {
@@ -283,10 +301,10 @@ export default class App extends React.Component {
                                     
                                     
                                       <View style={{flex:1}}>
-                                          <View style={{flexDirection: 'row',paddingLeft:0}}>
-                                              <Text style={{fontWeight:"bold",justifyContent:"flex-start",paddingRight:'25%',paddingLeft:5}}>{u.fecha}</Text>
+                                          <View style={{flexDirection: 'row',paddingLeft:0,width:'100%'}}>
+                                              <Text style={{fontWeight:"bold",justifyContent:"flex-start",paddingLeft:5}}>{u.fecha}</Text>
                                               {u.state_buttons? (    
-                                              <View style={{flexDirection: 'row'}}>
+                                              <View style={{flexDirection: 'row',borderWidth:0,justifyContent: "flex-end",alignItems: 'center',width:'70%'}}>
                                                   <Button
                                                   color="#ff0000"
                                                   title=" Aceptar "
@@ -313,7 +331,7 @@ export default class App extends React.Component {
             </View>
 
                   {this.state.show ? (
-                    <View style={{position:"absolute", top:'85%',borderWidth:1, width: '100%',height:'12%',backgroundColor: '#FFF'}}>
+                    <View style={{position:"absolute", top:'85%',borderWidth:1, width: '100%',height:'15%',backgroundColor: '#FFF'}}>
                           <TouchableOpacity  style={{ zIndex: 1, position: 'absolute',width: '7%',height:'25%',borderWidth:2,left:'93%'}}>
                           <View ><Text onPress={this.Hidde_Banner} style={{textAlign:"center", fontSize:14, fontWeight:'bold'}}>X</Text></View>
                           </TouchableOpacity>
