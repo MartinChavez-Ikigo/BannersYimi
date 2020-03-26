@@ -50,6 +50,7 @@ export default class App extends React.Component {
     super();
     this.state = {
       show: false,
+      show2: false,
       pila_banner:[],
       pila_notificaciones:[]
     };
@@ -67,16 +68,14 @@ export default class App extends React.Component {
   
   ShowHideComponent = () => {
     this.state.pila_banner.pop();
-    if (this.state.show == true) {
-      this.setState({ show: false });
-    } else {
-      this.setState({ show: true });
-    }
+    this.setState({ show: false });
+    this.setState({ show2: false });
   };
 
   Hidde_Banner = () => {
     alert("Cerro el banner");
     this.setState({ show: false });
+    this.setState({ show2: false });
   };
 
   Save_Notifications(data){
@@ -181,17 +180,26 @@ export default class App extends React.Component {
         if(data.comando=="003"){
           //alert("Comando de Banner nuevo (Promociones)");
          // this.setState({ pila_banner: '' });
+         console.log("data -------> : "+data.promocion_var6);
+         
           this.state.pila_banner.push(data);
           //this.setState({ pila_banner: JSON.stringify(data) });
           this.setState({ comando: data.comando });
-          this.setState({ show: true });
+          
+          if(data.promocion_var6==false){alert("Banner simple imagen izquierda");
+            this.setState({ show: true });
+          }else{alert("Banner full image");
+            this.setState({ show2: true });
+          }
           //console.log(this.state.pila_banner);
           console.log(this.state.pila_banner[0].promocion_var1);
           console.log(this.state.pila_banner[0].promocion_var2);
           console.log(this.state.pila_banner[0].promocion_var3);
           console.log(this.state.pila_banner[0].promocion_var4);
           console.log(this.state.pila_banner[0].promocion_var5);
+          console.log(this.state.pila_banner[0].imagen);
         }
+        
         if(data.comando=="004"){
           //alert("Comando de informacion de pago");
           this.state.pila_notificaciones.push(data);
@@ -331,18 +339,18 @@ export default class App extends React.Component {
             </View>
 
                   {this.state.show ? (
-                    <View style={{position:"absolute", top:'85%',borderWidth:1, width: '100%',height:'15%',backgroundColor: '#FFF'}}>
+                    <View style={{position:"absolute", top:'85%',borderWidth:1, width: '100%',backgroundColor: '#FFF',alignSelf: 'flex-start'}}>
                           <TouchableOpacity  style={{ zIndex: 1, position: 'absolute',width: '7%',height:'25%',borderWidth:2,left:'93%'}}>
                           <View ><Text onPress={this.Hidde_Banner} style={{textAlign:"center", fontSize:14, fontWeight:'bold'}}>X</Text></View>
                           </TouchableOpacity>
                               <TouchableOpacity onPress={this.ShowHideComponent}>
                                 <View style={{borderWidth:0,width:'70%',height:'100%'}}>
                                   
-                                  <Text style={{textAlign:"center", fontSize:10, fontWeight:'bold', fontStyle:'italic'}}>{this.state.pila_banner[0].promocion_var1}</Text>
-                                  <Text style={{textAlign:"center", fontSize:14, fontWeight:'bold', fontStyle:'italic'}}>{this.state.pila_banner[0].promocion_var2}</Text>
-                                  <Text style={{textAlign:"center", fontSize:10, fontWeight:'bold', fontStyle:'italic'}}>{this.state.pila_banner[0].promocion_var3}</Text>
-                                  <Text style={{textAlign:"center", fontSize:10, fontWeight:'bold', fontStyle:'italic'}}>{this.state.pila_banner[0].promocion_var4}</Text>
-                                  <Text style={{textAlign:"center", fontSize:9, fontWeight:'bold', fontStyle:'italic'}}>{this.state.pila_banner[0].promocion_var5}</Text>
+                                  <Text style={{textAlign:"center", fontSize:10+2, fontWeight:'bold', fontStyle:'italic'}}>{this.state.pila_banner[0].promocion_var1}</Text>
+                                  <Text style={{textAlign:"center", fontSize:14+2, fontWeight:'bold', fontStyle:'italic'}}>{this.state.pila_banner[0].promocion_var2}</Text>
+                                  <Text style={{textAlign:"center", fontSize:10+2, fontWeight:'bold', fontStyle:'italic'}}>{this.state.pila_banner[0].promocion_var3}</Text>
+                                  <Text style={{textAlign:"center", fontSize:10+2, fontWeight:'bold', fontStyle:'italic'}}>{this.state.pila_banner[0].promocion_var4}</Text>
+                                  <Text style={{textAlign:"center", fontSize:9+2, fontWeight:'bold', fontStyle:'italic'}}>{this.state.pila_banner[0].promocion_var5}</Text>
                                 </View>
                                   <View style={{ left:'70%', zIndex: 0, position: 'absolute',borderWidth:0,width:'30%',height:'100%' }}>
                                       <Image
@@ -354,6 +362,27 @@ export default class App extends React.Component {
                               </TouchableOpacity>
                       </View>
                   ) : null}
+
+
+                  {this.state.show2 ? (
+                    <View style={{position:"absolute", top:'85%',borderWidth:1, width: '100%',height:'15%',alignSelf:'flex-start'}}>
+                          <TouchableOpacity  style={{ zIndex: 1, position: 'absolute',width: '7%',height:'25%',borderWidth:2,left:'93%',alignSelf: 'flex-start'}}>
+                          <View ><Text onPress={this.Hidde_Banner} style={{textAlign:"center", fontSize:14, fontWeight:'bold'}}>X</Text></View>
+                          </TouchableOpacity>
+                              <TouchableOpacity onPress={this.ShowHideComponent}>
+                               
+                                  
+                                      <Image
+                                      style={{ width: '100%', height: '100%' }}
+                                      source={{ uri: 'https://images.vexels.com/media/users/3/137099/isolated/preview/0e0ef8c04e05e38562aeba6544c59e29-banner-de-cinta-ondulado-doodle-by-vexels.png'}}
+                                      />
+                                  
+                                  
+                              </TouchableOpacity>
+                    </View>
+                  ) : null}  
+
+                 
 
       </View>
 
