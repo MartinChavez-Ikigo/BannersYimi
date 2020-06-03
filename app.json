@@ -1,9 +1,9 @@
  {
   "expo": {
-   "name": "YIMI NOTIFI-BANNER-DETALLECOBRO ",
+   "name": "YIMI VIAJES PROGRAMADOS Y NOTIFICACIONES 08/05/2020 - Actualizacion de eventos click",
    "icon": "",
-   "version": "1.0.0",
-   "slug": "Yimi_Notificaciones_Banners_DetalleCobro",
+   "version": "1.0.4",
+   "slug": "Actualizar_Banner_con_evento",
    "sdkVersion": "36.0.0",
    "ios": {
      "bundleIdentifier": "com.yimi.yiminoti",
